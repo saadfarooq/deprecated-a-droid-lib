@@ -1,4 +1,4 @@
-package com.google.code.adroid;
+package com.github.adroid;
 
 
 public class Adroid {

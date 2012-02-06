@@ -1,7 +1,10 @@
-package com.google.code.adroid.location;
+
+
+package com.github.adroid.location;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.location.Criteria;
@@ -12,9 +15,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.code.adroid.Adroid;
-import com.google.code.adroid.AsyncCallBack;
-import com.google.code.adroid.AsyncStarting;
+import com.github.adroid.Adroid;
+import com.github.adroid.AsyncCallBack;
+import com.github.adroid.AsyncStarting;
 
 public class AsyncGetLocation extends AsyncTask<Void, Void, Object> implements LocationListener {
 	
@@ -24,7 +27,7 @@ public class AsyncGetLocation extends AsyncTask<Void, Void, Object> implements L
 	LocationManager mLocationManager;
 	Location mLocation;
 	
-	public AsyncGetLocation(Object caller) {
+	public AsyncGetLocation(Activity caller) {
 		this.caller = caller;
 	}
 	
