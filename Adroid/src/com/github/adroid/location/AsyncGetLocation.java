@@ -4,7 +4,6 @@ package com.github.adroid.location;
 
 import java.util.List;
 
-import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.location.Criteria;
@@ -16,19 +15,25 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.github.adroid.Adroid;
-import com.github.adroid.AsyncCallBack;
+import com.github.adroid.AsyncCaller;
 import com.github.adroid.AsyncStarting;
 
 public class AsyncGetLocation extends AsyncTask<Void, Void, Object> implements LocationListener {
 	
 	private final static String TAG = "AsyncGetLocation";
 	
-	Object caller;
+	private Object caller;
+	private int requestCode = 0;
 	LocationManager mLocationManager;
 	Location mLocation;
 	
-	public AsyncGetLocation(Activity caller) {
+	public AsyncGetLocation(AsyncCaller caller) {
 		this.caller = caller;
+	}
+	
+	public AsyncGetLocation(AsyncCaller caller, int requestCode) {
+		this.caller = caller;
+		this.requestCode = requestCode;
 	}
 	
 	@Override
@@ -68,7 +73,7 @@ public class AsyncGetLocation extends AsyncTask<Void, Void, Object> implements L
 	
 	@Override
 	protected void onPostExecute(Object result) {
-		((AsyncCallBack) caller).onBackgroundTaskCompleted(Adroid.GET_LOCATION, result);
+		((AsyncCaller) caller).onBackgroundTaskCompleted(requestCode, result);
 	}
 
 	@Override
