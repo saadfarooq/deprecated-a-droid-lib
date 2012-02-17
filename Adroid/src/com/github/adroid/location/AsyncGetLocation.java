@@ -1,5 +1,18 @@
-
-
+/*******************************************************************************
+ * Copyright 2012 Saad Farooq
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package com.github.adroid.location;
 
 import java.util.List;
@@ -15,8 +28,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.github.adroid.Adroid;
-import com.github.adroid.AsyncCaller;
-import com.github.adroid.AsyncStarting;
+import com.github.adroid.async.AsyncCaller;
+import com.github.adroid.async.AsyncStarting;
 
 public class AsyncGetLocation extends AsyncTask<Void, Void, Object> implements LocationListener {
 	
@@ -38,13 +51,14 @@ public class AsyncGetLocation extends AsyncTask<Void, Void, Object> implements L
 	
 	@Override
 	protected void onPreExecute() {
-		mLocationManager = (LocationManager) ((Context) caller).getSystemService(Service.LOCATION_SERVICE);
-		
 		// If the calling Activity implements the AsyncStarting interface
 		if (AsyncStarting.class.isInstance(caller)) {
 			// call its onBackgroundTaskStarted method
 			((AsyncStarting) caller ).onBackgroundTaskStarted();
 		}
+		
+		mLocationManager = (LocationManager) ((Context) caller).getSystemService(Service.LOCATION_SERVICE);
+		
 		// Get the list of providers and check each one for a last known location; return the first one found
 		List<String> providers = mLocationManager.getProviders(new Criteria(), true);
 		for (String provider : providers) {
