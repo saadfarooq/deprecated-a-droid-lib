@@ -12,8 +12,6 @@ The following have been added so far. You are welcome to fork or suggest improve
 * `AsyncGetLocationTask` -- get a course location in the background, waits for result if one is not available
 * `AsyncJsonGetTask` -- get a Json response from a webservice using GET (webservice details need to be added manually to WebServices.java)
 * `AsyncJsonPostTask` -- get a Json response from a webservice using POST (webservice details need to be added manually to WebServices.java)
-* `PaginatedGallery` -- a Paginated Gallery similar to iOS with page indicators and click listener (uses code imported from [ViewPagerIndicator][1] lib)
-* `PaginatedGalleryAdapter` -- Adapter for the gallery
  
 Developed By
 ------------
