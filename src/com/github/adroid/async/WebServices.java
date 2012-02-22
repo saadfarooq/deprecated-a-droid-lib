@@ -40,15 +40,42 @@ import android.util.Log;
 public class WebServices {
 	static final String TAG = "WebServices";
 	
-	public static final String BASE_URL = "";
-	public static final String WS_USERNAME = "";
-	public static String WS_PASSWORD = "";
+	private static String BASE_URL;
+	private static String WS_USERNAME;
+	private static String WS_PASSWORD;
+	private static boolean DEBUG = false;
 	
 	static final int CONNECTION_TIMEOUT = 1000;
 	static final int SOCKET_TIMOUT = 2000;
 	static DefaultHttpClient client = getThreadSafeClient(); 
 
-	public static String httpGet(final String methodName, List<NameValuePair> params) {
+	public static void setURL(String url) {
+		BASE_URL = url;
+	}
+	
+	public static void setURL(String url, boolean debug) {
+		BASE_URL = url;
+		DEBUG = debug;
+	}
+	
+	public static void setURL(String url, String username, String password) {
+		BASE_URL = url;
+		WS_USERNAME = username;
+		WS_PASSWORD = password;
+	}
+	
+	public static void setURL(String url, String username, String password, boolean debug) {
+		BASE_URL = url;
+		WS_USERNAME = username;
+		WS_PASSWORD = password;
+		DEBUG = debug;
+	}
+	
+	public static String httpGet(final String methodName, final List<NameValuePair> params) {
+		
+		if (BASE_URL.equals("")) {
+			return null;
+		}
 		
 		String methodURL = BASE_URL + "/"+methodName;
 		
@@ -80,11 +107,15 @@ public class WebServices {
 		Log.d(TAG,"Setting GET request credentials");
 		// BasicResponseHandler returns the response body as string
 		BasicResponseHandler handler = new BasicResponseHandler();
-		client.getCredentialsProvider().setCredentials(new AuthScope(null,-1), new UsernamePasswordCredentials(WS_USERNAME, WS_PASSWORD));
+		
+		if (WS_USERNAME != null && WS_PASSWORD != null) {
+			client.getCredentialsProvider().setCredentials(new AuthScope(null,-1), new UsernamePasswordCredentials(WS_USERNAME, WS_PASSWORD));
+		}
+		
 		
 		String response = null;
 		try {
-			Log.d(TAG,"Executing get");
+			if (DEBUG) Log.d(TAG,"Executing get, "+ httpGet.getURI());
 			response = client.execute(httpGet,handler);
 		} catch (Exception e) {
 			Log.e(TAG, e.getMessage(),e);
@@ -99,20 +130,23 @@ public class WebServices {
         HttpConnectionParams.setConnectionTimeout(httpParams, CONNECTION_TIMEOUT);
         HttpConnectionParams.setSoTimeout(httpParams, SOCKET_TIMOUT);
         
-        Log.d(TAG, "Setting request credentials");
-        // Apparently this doesn't work with POST Request
-        //client.getCredentialsProvider().setCredentials(new AuthScope(null, -1), new UsernamePasswordCredentials(WS_USERNAME,WS_PASSWORD));
+        HttpPost request = new HttpPost(BASE_URL+"/"+methodName);
+        
+        if (WS_USERNAME != null && WS_PASSWORD != null) {
+        	Log.d(TAG, "Setting request credentials");
+            // Apparently this doesn't work with POST Request
+            //client.getCredentialsProvider().setCredentials(new AuthScope(null, -1), new UsernamePasswordCredentials(WS_USERNAME,WS_PASSWORD));
+        	request.setHeader("Authorization","Basic "+Base64.encodeToString((WS_USERNAME+":"+WS_PASSWORD).getBytes(),Base64.URL_SAFE|Base64.NO_WRAP));
+        }
         
         String jsonResponse = null;
-        
         Log.d(TAG, "HttpPost URL: "+ BASE_URL+"/"+methodName);
-        HttpPost request = new HttpPost(BASE_URL+"/"+methodName);
+        
         try {
         	request.setEntity(new StringEntity(payLoad, "UTF-8"));
-        	request.setHeader("Authorization","Basic "+Base64.encodeToString((WS_USERNAME+":"+WS_PASSWORD).getBytes(),Base64.URL_SAFE|Base64.NO_WRAP));
         	request.setHeader(HTTP.CONTENT_TYPE, "application/json; charset=utf-8");
         	BasicResponseHandler handler = new BasicResponseHandler();
-        	Log.d(TAG, "Executing post request");
+        	if (DEBUG) Log.d(TAG, "Executing post request with payload "+payLoad);
             jsonResponse = client.execute(request, handler);
         } catch (Exception e) {
         	Log.e(TAG, e.getMessage(),e);

@@ -29,7 +29,7 @@ public class ConnectedActivity extends Activity {
 	 private BroadcastReceiver mConnReceiver = new BroadcastReceiver() {
 	        @Override
 	        public void onReceive(Context context, Intent intent) {	            
-	            connectivityManager = (ConnectivityManager) context.getSystemService( Context.CONNECTIVITY_SERVICE );
+	            connectivityManager = (ConnectivityManager) getSystemService( Context.CONNECTIVITY_SERVICE );
 	            NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
 	            
 	            if ( activeNetInfo!= null && activeNetInfo.isConnectedOrConnecting() )
