@@ -17,7 +17,7 @@ The following have been added so far. You are welcome to fork or suggest improve
 Developed By
 ------------
 
-* Saad Farooq - <unimpeccable@gmail.com>
+* Saad Farooq - <sa@dfarooq.com>
 
 
 Contributing
